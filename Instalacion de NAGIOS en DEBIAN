@@ -1,0 +1,92 @@
+---------------------------------------------------------------------------------------
+------------Comandos para implementar las dependencias de Nagios en Debian-------------- 
+
+1. Luego de haber instalado los recursos se requiere typear los siguiente comandos en modo ROOT
+
+  * apt update
+  * apt upgrade 
+
+2. Instalar Apache y PHP
+
+  * apt install apache2 libapache2-mod-php php
+
+3. Instalar sus dependencias 
+
+  * apt install wget unzip zip autoconf gcc libc6 make apache2-utils libgd-dev
+
+4. Iniciar el servicio Apache 
+
+  * systemctl start apache2
+  * systemctl enable apache2
+
+
+------------Comandos para implementar Nagios en Debian-------------- 
+
+1. El repositorio desde la fuente de Nagios
+
+  * wget https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.6.tar.gz
+
+2. Extraer el archivo
+
+  * tar -xvzf nagios-4.4.6.tar.gz
+
+3. Crear usuario y grupo para agregar una cuneta de Nagios al usuario www-data de APACHE
+
+  * usuario agregar nagios
+  * usermod -a -G nagios www-datos
+
+4. Dirigirse al directorio de Nagios y listar los ficheros que contienen
+
+  * cd nagios-4.4.6/
+  * ls-la
+
+5. Compilar Nagios desde las fuentes 
+
+  * ./configure --with-httpd-conf=/etc/apache2/sites-enabled
+
+6. Crear los ficheros con el siguiente comando 
+
+  * make all
+
+7. Instalar los archivos binarios, scripts CGI y archivos HTML
+
+  * make install
+
+8. Instalar los archivos de configuracion y iniciar los demonios de nagios 
+
+  * make install-init
+  * make install-commandmode
+  * systemctl enable nagios.service
+
+9. Ejecutar los archivos de configuracion de Nagios 
+
+  * make install-config
+
+Mensaje de instalacion exitosa ---> *** Config files installed ***
+
+10. Instalar el archivo de configuracion de Nagios para el srv web - APACHE, se encuentra en el siguiente directorio
+/etc/apache2/sites-enabled/
+
+  * make install-webconf
+
+------------ Comandos para crear usuario adm de Nagios --------------
+
+1. Para crear credenciales de autenticacion 
+
+  * htpasswd -c /usr/local/nagios/etc/htpasswd.users usuariodesupreferencia
+
+2. Habilitar los servicios nagios cgi 
+
+  * a2enmod cgi
+
+3. Reiniciar el servicios de Nagios 
+
+  * systemctl reinicia apache2 
+  * systemctl inicia nagios
+
+------------ Acceso a la interfaz WEB de NAGIOS --------------
+
+Acceder con la ip que haya configurado durante la instalacion en su navegador
+   
+                http://your-server-ip-/nagios
+----------------------------------------------------------------------------
